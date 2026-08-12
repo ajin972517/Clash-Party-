@@ -11,6 +11,7 @@
 - `overrides/WgetCloud-Info-Nodes.js`：WgetCloud JavaScript 覆写，移除订阅信息节点，并同步清理策略组中的对应引用。
 - `overrides/BoostNet.yaml`：BoostNet YAML 覆写，包含个人策略组与分流规则。
 - `overrides/TCP保活.yaml`：TCP 保活参数。
+- `overrides/通用3合1覆写.js`：推荐的通用 JavaScript 覆写；动态保留真实订阅节点，并同时完成信息节点清理、策略组与规则重建、TCP 保活设置。
 
 ## 使用方法
 
@@ -22,6 +23,8 @@
 4. 将 `BoostNet.yaml` 绑定到 BoostNet 订阅。
 5. 将 `TCP保活.yaml` 作为全局覆写，或绑定到需要启用 TCP 保活的订阅。
 6. 更新订阅并检查生成后的配置是否能正常加载。
+
+如果使用 `通用3合1覆写.js`，只需把这一个 JavaScript 覆写绑定到目标订阅，不要再同时绑定上述三个单项覆写，以免重复覆盖。通用版本会按照节点名称自动识别香港、台湾、日本、新加坡和美国节点；未识别地区的节点仍会完整保留在“节点选择”和“自动选择”中。
 
 ## TCP 保活参数
 
