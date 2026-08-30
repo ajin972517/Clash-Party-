@@ -1,5 +1,0 @@
-# Clash Party YAML override
-# https://clashparty.org/docs/guide/override/yaml
-keep-alive-idle: 60
-keep-alive-interval: 30
-disable-keep-alive: false
