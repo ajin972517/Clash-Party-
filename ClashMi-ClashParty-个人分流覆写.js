@@ -15573,6 +15573,57 @@ const PROXY_FIRST_GROUPS = [
   "🤖 Copilot"
 ];
 
+const AI_KEEPALIVE_RULES = [
+  // OpenAI / ChatGPT / Codex
+  "DOMAIN,ws.chatgpt.com,🤖 ChatGPT",
+  "DOMAIN,api.openai.com,🤖 ChatGPT",
+  "DOMAIN-SUFFIX,chatgpt.livekit.cloud,🤖 ChatGPT",
+  "DOMAIN-SUFFIX,host.livekit.cloud,🤖 ChatGPT",
+  "DOMAIN-SUFFIX,turn.livekit.cloud,🤖 ChatGPT",
+
+  // Anthropic Claude
+  "DOMAIN,api.anthropic.com,🤖 Claude",
+  "DOMAIN-SUFFIX,claude.ai,🤖 Claude",
+  "DOMAIN-SUFFIX,claude.com,🤖 Claude",
+
+  // Google Gemini
+  "DOMAIN,generativelanguage.googleapis.com,🤖 Gemini",
+  "DOMAIN,gemini.google.com,🤖 Gemini",
+  "DOMAIN,ai.google.dev,🤖 Gemini",
+
+  // Microsoft Copilot
+  "DOMAIN,copilot.microsoft.com,🤖 Copilot",
+  "DOMAIN,sydney.bing.com,🤖 Copilot",
+  "DOMAIN,www.bingapis.com,🤖 Copilot",
+
+  // 其他常用 AI 智能体与编程助手
+  "DOMAIN-SUFFIX,perplexity.ai,💬 Ai平台",
+  "DOMAIN-SUFFIX,poe.com,💬 Ai平台",
+  "DOMAIN-SUFFIX,cursor.com,💬 Ai平台",
+  "DOMAIN-SUFFIX,cursor.sh,💬 Ai平台",
+  "DOMAIN-SUFFIX,windsurf.com,💬 Ai平台",
+  "DOMAIN-SUFFIX,codeium.com,💬 Ai平台",
+  "DOMAIN,api.x.ai,𝕏 推特",
+  "DOMAIN-SUFFIX,grok.com,𝕏 推特",
+];
+
+const INFORMATION_NODE_PATTERN =
+  /官网|距离下次重置剩余|剩余流量|套餐到期/i;
+
+function prefixedGroupName(name) {
+  const separator = name.indexOf(" ");
+  if (separator === -1) return `通用I ${name}`;
+  return `${name.slice(0, separator)} 通用I ${name.slice(separator + 1)}`;
+}
+
+function rewriteGroupReferences(rule, groupNameMap) {
+  if (typeof rule !== "string") return rule;
+  return rule
+    .split(",")
+    .map((part) => groupNameMap.get(part) || part)
+    .join(",");
+}
+
 function selectableGroup(name, proxies) {
   return {
     name,
@@ -15587,23 +15638,25 @@ function main(config) {
   config.mode = "rule";
 
   // TCP Keep Alive（秒）
-  config["keep-alive-idle"] = 60;
-  config["keep-alive-interval"] = 30;
+  config["keep-alive-idle"] = 15;
+  config["keep-alive-interval"] = 15;
   config["disable-keep-alive"] = false;
 
+  // BoostNet 会把流量、重置、到期和官网信息伪装成代理节点。
+  // 从源头删除，避免 include-all 再次将它们加入所有策略组。
+  if (Array.isArray(config.proxies)) {
+    config.proxies = config.proxies.filter(
+      (proxy) =>
+        !(
+          proxy &&
+          typeof proxy.name === "string" &&
+          INFORMATION_NODE_PATTERN.test(proxy.name)
+        ),
+    );
+  }
+
   const groups = [
-    selectableGroup("🚀 节点选择", ["♻️ 自动选择", "DIRECT"]),
-    {
-      name: "♻️ 自动选择",
-      type: "url-test",
-      "include-all": true,
-      "exclude-type": "direct",
-      url: "https://www.gstatic.com/generate_204",
-      interval: 300,
-      tolerance: 80,
-      lazy: true,
-      "empty-fallback": "DIRECT",
-    },
+    selectableGroup("🚀 节点选择", ["DIRECT"]),
   ];
 
   for (const name of DIRECT_FIRST_GROUPS) {
@@ -15622,7 +15675,28 @@ function main(config) {
     { name: "🐟 漏网之鱼", type: "select", proxies: ["🚀 节点选择", "DIRECT"] },
   );
 
+  // 每个可选策略组均提供 DIRECT，并保持原有选项顺序。
+  for (const group of groups) {
+    if (group.type === "select" && !group.proxies.includes("DIRECT")) {
+      group.proxies.push("DIRECT");
+    }
+  }
+
+  // 使用独立组名隔离 Mihomo 的 store-selected 缓存。
+  const groupNameMap = new Map(
+    groups.map((group) => [group.name, prefixedGroupName(group.name)]),
+  );
+
+  for (const group of groups) {
+    group.proxies = group.proxies.map(
+      (name) => groupNameMap.get(name) || name,
+    );
+    group.name = groupNameMap.get(group.name);
+  }
+
   config["proxy-groups"] = groups;
-  config.rules = PERSONAL_RULES.slice();
+  config.rules = [...AI_KEEPALIVE_RULES, ...PERSONAL_RULES].map((rule) =>
+    rewriteGroupReferences(rule, groupNameMap),
+  );
   return config;
 }
