@@ -1,0 +1,22 @@
+name: "通用I · ChatGPT 分流测试"
+desc: |-
+  Stash iOS 最小化测试覆写。
+  仅新增一个 ChatGPT 策略组和一个远程域名规则集合；不替换订阅原有配置。
+
+rule-providers:
+  stash-chatgpt-test:
+    behavior: domain
+    format: text
+    url: https://raw.githubusercontent.com/ajin972517/Clash-Party-/main/Stash/rules/chatgpt-domains.txt
+    path: ./rules/stash-chatgpt-test.txt
+    interval: 86400
+
+proxy-groups:
+  - name: "🤖 通用I ChatGPT测试"
+    type: select
+    include-all: true
+    proxies:
+      - "DIRECT"
+
+rules:
+  - "RULE-SET,stash-chatgpt-test,🤖 通用I ChatGPT测试"

@@ -1,0 +1,11 @@
++.openai.com
++.chatgpt.com
++.oaistatic.com
++.oaiusercontent.com
++.openaiusercontent.com
++.auth0.com
++.statsigapi.net
++.featuregates.org
++.chatgpt.livekit.cloud
++.host.livekit.cloud
++.turn.livekit.cloud
