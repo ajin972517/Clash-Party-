@@ -15694,6 +15694,21 @@ function main(config) {
     group.name = groupNameMap.get(group.name);
   }
 
+  // exclude-type: direct 会让 Mihomo 隐藏各组中显式写入的 DIRECT。
+  // 因此提供一个固定直连组，并将它加入其余所有策略组。
+  const globalDirectGroupName = groupNameMap.get("🎯 全球直连");
+  for (const group of groups) {
+    if (group.name === globalDirectGroupName) {
+      // 固定为 DIRECT，避免它与“节点选择”相互引用形成循环。
+      group.proxies = ["DIRECT"];
+      continue;
+    }
+
+    if (!group.proxies.includes(globalDirectGroupName)) {
+      group.proxies.unshift(globalDirectGroupName);
+    }
+  }
+
   config["proxy-groups"] = groups;
   config.rules = [...AI_KEEPALIVE_RULES, ...PERSONAL_RULES].map((rule) =>
     rewriteGroupReferences(rule, groupNameMap),
