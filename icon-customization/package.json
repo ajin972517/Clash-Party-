@@ -1,0 +1,14 @@
+{
+  "name": "clash-party-icon-customization",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-from-install.mjs"
+  },
+  "dependencies": {
+    "@electron/asar": "4.3.1",
+    "@electron/fuses": "2.1.3",
+    "resedit": "3.1.0"
+  }
+}

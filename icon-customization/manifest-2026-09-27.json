@@ -1,0 +1,12 @@
+{
+  "date": "2026-09-27",
+  "platform": "Windows x64",
+  "upstreamVersion": "2.0.3",
+  "originalExeSha256": "c0c453ebbb6173a3b75dc139edb056fe75c6e62d19b48ceabe3a8cf2dbe932fc",
+  "modifiedExeSha256": "eee52a5ed0a95283afed31995bf807f251b02553e390652c11add8d536316f9b",
+  "originalAsarSha256": "2d74f940335fb3cc49dedfcf34548c5b88821b4df9d1153dc69db19952d55f06",
+  "modifiedAsarSha256": "0cf55604ec2fe5f26590c84ba11e3ac1d5d8051e5a96057f237b7f6f424c1c50",
+  "sourceSvgSha256": "402832befde1f97f2803034e7061c52fa143c8bb1a5ccd004a2f9b31cd155d78",
+  "renderedPngSha256": "5444f9c5af58a6c7420b8f31a8fcb1d1a486bcb814408d20a5b1a69ef09a1367",
+  "windowsIcoSha256": "68d4b8fd92632e27bbdabba04274a8587bccb01b41b24e22106e06c0c2f0e575"
+}
