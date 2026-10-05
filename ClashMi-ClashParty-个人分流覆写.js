@@ -15634,7 +15634,7 @@ const INFORMATION_NODE_PATTERN =
   /官网|距离下次重置剩余|剩余流量|套餐到期/i;
 
 function prefixedGroupName(name) {
-  if (name === "ⓕ 脸书") return name;
+  if (name === "ⓕ 脸书") return "通用I ⓕ 脸书";
   const separator = name.indexOf(" ");
   if (separator === -1) return `通用I ${name}`;
   return `${name.slice(0, separator)} 通用I ${name.slice(separator + 1)}`;
