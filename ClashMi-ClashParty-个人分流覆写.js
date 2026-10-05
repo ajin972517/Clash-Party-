@@ -3,6 +3,28 @@
 // 换机场后仍会自动纳入新订阅的所有节点和代理集合。
 
 const PERSONAL_RULES = [
+  "DOMAIN-SUFFIX,facebook.com,ⓕ 脸书",
+  "DOMAIN-SUFFIX,facebook.net,ⓕ 脸书",
+  "DOMAIN-SUFFIX,fbcdn.net,ⓕ 脸书",
+  "DOMAIN-SUFFIX,fbcdn.com,ⓕ 脸书",
+  "DOMAIN-SUFFIX,fbsbx.com,ⓕ 脸书",
+  "DOMAIN-SUFFIX,fbsbx.net,ⓕ 脸书",
+  "DOMAIN-SUFFIX,tfbnw.net,ⓕ 脸书",
+  "DOMAIN-SUFFIX,fb.com,ⓕ 脸书",
+  "DOMAIN-SUFFIX,fb.me,ⓕ 脸书",
+  "DOMAIN-SUFFIX,fb.watch,ⓕ 脸书",
+  "DOMAIN-SUFFIX,fbwat.ch,ⓕ 脸书",
+  "DOMAIN-SUFFIX,fb.gg,ⓕ 脸书",
+  "DOMAIN-SUFFIX,fburl.com,ⓕ 脸书",
+  "DOMAIN-SUFFIX,facebookads.com,ⓕ 脸书",
+  "DOMAIN-SUFFIX,facebookmail.com,ⓕ 脸书",
+  "DOMAIN-SUFFIX,thefacebook.com,ⓕ 脸书",
+  "DOMAIN-SUFFIX,thefacebook.net,ⓕ 脸书",
+  "DOMAIN,fbcdn-a.akamaihd.net,ⓕ 脸书",
+  "DOMAIN-SUFFIX,messenger.com,ⓕ 脸书",
+  "DOMAIN-SUFFIX,fbmessenger.com,ⓕ 脸书",
+  "DOMAIN-SUFFIX,m.me,ⓕ 脸书",
+  "DOMAIN-SUFFIX,nbabot.net,ⓕ 脸书",
   "DOMAIN-SUFFIX,supabase.co,🎯 全球直连",
   "IP-CIDR,103.10.124.0/23,🎯 全球直连,no-resolve",
   "IP-CIDR,146.66.152.0/21,🎯 全球直连,no-resolve",
@@ -15557,6 +15579,7 @@ const DIRECT_FIRST_GROUPS = [
 ];
 
 const PROXY_FIRST_GROUPS = [
+  "ⓕ 脸书",
   "📲 电报消息",
   "📹 油管视频",
   "🎥 奈飞视频",
@@ -15611,6 +15634,7 @@ const INFORMATION_NODE_PATTERN =
   /官网|距离下次重置剩余|剩余流量|套餐到期/i;
 
 function prefixedGroupName(name) {
+  if (name === "ⓕ 脸书") return name;
   const separator = name.indexOf(" ");
   if (separator === -1) return `通用I ${name}`;
   return `${name.slice(0, separator)} 通用I ${name.slice(separator + 1)}`;
